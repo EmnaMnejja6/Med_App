@@ -1,0 +1,191 @@
+{
+  "project_info": {
+    "project_number": "634230916719",
+    "firebase_url": "https://medapp-4a196-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "medapp-4a196",
+    "storage_bucket": "medapp-4a196.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634230916719:android:223522b0842c8e36e7af9a",
+        "android_client_info": {
+          "package_name": "com.enis.medapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634230916719-un6p1404nsmvtt35c6cf0he6kmqrud2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArKvRNtMVg5e1uJ1hFh7dIy9PWJkAyJL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634230916719-4lupdmhv4mikvfjq6r1nqtct5dkrgnjb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634230916719-0op2hg467jhmt4daj7gs1k2qgt018kci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enis.medapp.enis"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634230916719:android:36f0c23624ac9120e7af9a",
+        "android_client_info": {
+          "package_name": "com.example.medapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634230916719-un6p1404nsmvtt35c6cf0he6kmqrud2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArKvRNtMVg5e1uJ1hFh7dIy9PWJkAyJL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634230916719-4lupdmhv4mikvfjq6r1nqtct5dkrgnjb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634230916719-0op2hg467jhmt4daj7gs1k2qgt018kci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enis.medapp.enis"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634230916719:android:87dd91262af245c8e7af9a",
+        "android_client_info": {
+          "package_name": "com.medapp.medapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634230916719-un6p1404nsmvtt35c6cf0he6kmqrud2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArKvRNtMVg5e1uJ1hFh7dIy9PWJkAyJL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634230916719-4lupdmhv4mikvfjq6r1nqtct5dkrgnjb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634230916719-0op2hg467jhmt4daj7gs1k2qgt018kci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enis.medapp.enis"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634230916719:android:619b0a5833480a3fe7af9a",
+        "android_client_info": {
+          "package_name": "medapp.aoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634230916719-un6p1404nsmvtt35c6cf0he6kmqrud2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArKvRNtMVg5e1uJ1hFh7dIy9PWJkAyJL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634230916719-4lupdmhv4mikvfjq6r1nqtct5dkrgnjb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634230916719-0op2hg467jhmt4daj7gs1k2qgt018kci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enis.medapp.enis"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634230916719:android:b39f6830fe909a59e7af9a",
+        "android_client_info": {
+          "package_name": "medapp.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634230916719-un6p1404nsmvtt35c6cf0he6kmqrud2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArKvRNtMVg5e1uJ1hFh7dIy9PWJkAyJL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634230916719-4lupdmhv4mikvfjq6r1nqtct5dkrgnjb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "634230916719-0op2hg467jhmt4daj7gs1k2qgt018kci.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enis.medapp.enis"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
