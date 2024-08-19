@@ -5,22 +5,59 @@ class FirebaseAuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+
   Future<User?> signUpWithEmailAndPassword(
-      String email, String password, String role) async {
+      String email, String password, String role, String nom, String prenom) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await _firestore.collection('users').doc(credential.user!.uid).set({
-        "uid": credential.user!.uid, // Add the UID here
+
+      String uid = credential.user!.uid;
+
+      // Add user data to the 'users' collection
+      await _firestore.collection('users').doc(uid).set({
+        "uid": uid,
         "email": email,
         "role": role,
       });
+
+      // Add additional data to the specific role collection
+      if (role == 'admin') {
+        await _firestore.collection('admin').doc(uid).set({
+          "nom": nom,
+          "prenom": prenom,
+          "password": password,
+          "mail": email,
+          "adresse": "",
+          "tel":""
+        });
+      } else if (role == 'super_admin') {
+        await _firestore.collection('superadmin').doc(uid).set({
+          "nom": nom,
+          "prenom": prenom,
+          "password": password,
+          "mail": email,
+          "adresse": "",
+          "tel":""
+        });
+      } else if (role == 'doctor') {
+        await _firestore.collection('doctor').doc(uid).set({
+          "nom": nom,
+          "prenom": prenom,
+          "password": password,
+          "mail": email,
+          "adresse": "",
+          "tel":""
+        });
+      }
+
       return credential.user;
     } catch (e) {
       print("An error occurred: $e");
       return null;
     }
   }
+
 
   Future<Map<String, dynamic>?> signInWithEmailAndPassword(
       String email, String password) async {

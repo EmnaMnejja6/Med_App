@@ -1,10 +1,10 @@
-/*import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hospital_app/pages/Doctor/home_doctor.dart';
-import 'package:hospital_app/user_auth/firebase_implementation/firebase_auth_services.dart';
-import 'package:hospital_app/pages/Doctor/home_doctor.dart';
-import 'package:hospital_app/user_auth/presentation/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:enis/user_auth/firebase_implementation/firebase_auth_services.dart';
+
+import 'WaitingPage.dart';
+import 'newlogin.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,218 +16,266 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuthServices _auth = FirebaseAuthServices();
 
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController(); // Controller for 'nom'
+  final TextEditingController _firstNameController = TextEditingController(); // Controller for 'prenom'
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  String _selectedRole = 'doctor'; // default role
+  bool _passwordVisible = false; // password visibility toggle
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _lastNameController.dispose();
+    _firstNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-
     super.dispose();
   }
 
-/*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Créer un compte'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Username',
-              ),
-            ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                ),
-                onPressed: _signUp,
-                child: Text(
-                  'Créer un compte',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Vous avez déjà un compte? "),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    child: Text(
-                      "Connectez-vous",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top:29.0, left: 10.0),
+                child: const Text(
+                  "MedApp",
+                  style: TextStyle(
+                    color: Color(0xFF084cac),
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-*/
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(15.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "MedApp",
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 50.0,
-                fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(left:8.0),
+                child: const Text(
+                  "Créer un nouveau compte",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 35.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            const Text(
-              "Créer un nouveau compte",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 44.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 44.0,
-            ),
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  hintText: "Nom d'utilisateur",
+              const SizedBox(
+                height: 44.0,
+              ),
+              TextField(
+                controller: _lastNameController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: "Nom",
                   prefixIcon: Icon(
                     Icons.person,
-                    color: Colors.blue,
-                  )),
-              controller: _usernameController,
-            ),
-            const SizedBox(
-              height: 26.0,
-            ),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                  hintText: "Email de l'utilisateur",
+                    color: Color(0xFF084cac),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 26.0,
+              ),
+              TextField(
+                controller: _firstNameController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: "Prénom",
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: Color(0xFF084cac),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 26.0,
+              ),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: "Email",
                   prefixIcon: Icon(
                     Icons.mail,
-                    color: Colors.blue,
-                  )),
-            ),
-            const SizedBox(
-              height: 26.0,
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
+                    color: Color(0xFF084cac),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 26.0,
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: !_passwordVisible,
+                decoration: InputDecoration(
                   hintText: "Mot de passe",
                   prefixIcon: Icon(
                     Icons.lock,
-                    color: Colors.blue,
-                  )),
-            ),
-            const SizedBox(
-              height: 11.0,
-            ),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Vous avez déjà un compte? "),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                    child: Text(
-                      "Connectez-vous",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    color: Color(0xFF084cac),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 44.0,
-            ),
-            Container(
-              width: double.infinity,
-              child: RawMaterialButton(
-                fillColor: Color(0xFF0069FE),
-                elevation: 0.0,
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0)),
-                onPressed: _signUp,
-                child: Text(
-                  "S'inscrire",
-                  style: TextStyle(color: Colors.white),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible ? Icons.visibility : Icons
+                          .visibility_off,
+                      color: Color(0xFF084cac),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 11.0,
+              ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Vous avez déjà un compte? "),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                                LoginPage()));
+                      },
+                      child: Text(
+                        "Connectez-vous",
+                        style: TextStyle(
+                          color: Color(0xFF084cac),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              const Text(
+                "Choisissez votre rôle",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio<String>(
+                    value: 'doctor',
+                    groupValue: _selectedRole,
+                    activeColor: Color(0xFF084cac),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedRole = value!;
+                      });
+                    },
+                  ),
+                  Text('Doctor'),
+                  Radio<String>(
+                    value: 'admin',
+                    groupValue: _selectedRole,
+                    activeColor: Color(0xFF084cac),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedRole = value!;
+                      });
+                    },
+                  ),
+                  Text('Admin'),
+                  Radio<String>(
+                    value: 'super_admin',
+                    groupValue: _selectedRole,
+                    activeColor: Color(0xFF084cac),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedRole = value!;
+                      });
+                    },
+                  ),
+                  Text('Super Admin'),
+                ],
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                child: RawMaterialButton(
+                  fillColor: Color(0xFF084cac),
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0)),
+                  onPressed: _signUp,
+                  child: Text(
+                    "S'inscrire",
+                    style: TextStyle(color: Colors.white
+                        , fontSize: 25),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _signUp() async {
-    String username = _usernameController.text;
+    String lastName = _lastNameController.text;
+    String firstName = _firstNameController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    User? user = await _auth.signUpWithEmailAndPassword(email, password, '');
+    if (lastName.isEmpty || firstName.isEmpty || email.isEmpty ||
+        password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Veuillez remplir tous les champs.'),
+        ),
+      );
+      return;
+    }
 
-    if (user != null) {
-      print("Utilisateur crée avec succés !");
+    try {
+      await FirebaseFirestore.instance.collection('pending').add({
+        'nom': lastName,
+        'prenom': firstName,
+        'email': email,
+        'password': password,
+        'role': _selectedRole,
+        'status': 'pending',
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Votre demande est en cours de traitement.'),
+        ),
+      );
+
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    } else {
-      print("Une erreur s'est produite !");
+        context,
+        MaterialPageRoute(
+            builder: (context) => WaitingPage()), // Navigate to WaitingPage
+      );
+    } catch (e) {
+      print("Une erreur s'est produite : $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Une erreur s'est produite. Veuillez réessayer."),
+        ),
+      );
     }
   }
 }
-*/

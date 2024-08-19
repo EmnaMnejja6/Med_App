@@ -19,20 +19,23 @@ class _PatientListPageState extends State<PatientListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Mes patients"),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('patients').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('patients')
+                  .where('doctorId', isEqualTo: widget.doctorId)
+                  .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  return Center(child: Text('Erreur: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text('Aucun patient trouvé'));
@@ -45,21 +48,22 @@ class _PatientListPageState extends State<PatientListPage> {
                   itemBuilder: (context, index) {
                     var patient = patients[index];
                     var patientId = patient.id;
-                    var avatar = patient['avatar'];
-                    var nom = patient['Nom'];
-                    var prenom = patient['Prenom'];
+                    var nom = patient['patientNom'];
+                    var prenom = patient['patientPrenom'];
 
                     return Card(
                       child: ListTile(
-                        leading: CircleAvatar(
+                        /*leading: CircleAvatar(
                           child: ClipOval(
-                            child: Image.asset('assets/images/$avatar.jpg', fit: BoxFit.cover, width: 50, height: 50),
+                            child: avatar.isNotEmpty
+                                ? Image.asset('assets/images/$avatar.jpg', fit: BoxFit.cover, width: 50, height: 50)
+                                : Icon(Icons.person, size: 50), // Default icon if no avatar
                           ),
-                        ),
+                        ),*/
                         title: Text('$nom $prenom'),
                         trailing: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                           backgroundColor:  Colors.blue,
+                            backgroundColor: Color(0xFF084cac),
                           ),
                           child: Text(
                             "Consulter",
@@ -87,6 +91,7 @@ class _PatientListPageState extends State<PatientListPage> {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(

@@ -30,7 +30,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Ajouter un patient "),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
       body: Container(
         margin: const EdgeInsets.all(20),
@@ -103,7 +103,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                    backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

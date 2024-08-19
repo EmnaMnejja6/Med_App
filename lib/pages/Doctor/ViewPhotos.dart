@@ -1,76 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../google_drive_service.dart';
 
 class ViewPhotosPage extends StatelessWidget {
   final String doctorId;
   final String patientId;
+  final GoogleDriveService googleDriveService;
 
-  const ViewPhotosPage({required this.doctorId, required this.patientId, Key? key}) : super(key: key);
+  const ViewPhotosPage({
+    required this.doctorId,
+    required this.patientId,
+    required this.googleDriveService,
+    Key? key,
+  }) : super(key: key);
+
+  Future<void> _deletePhoto(BuildContext context, String photoId) async {
+    try {
+      await googleDriveService.deleteFileFromDrive(photoId);
+
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(patientId)
+          .collection('photos')
+          .doc(photoId)
+          .delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Photo supprimée')),
+      );
+    } catch (e) {
+      print('Erreur lors de la suppression de la photo: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Échec de la suppression de la photo')),
+      );
+    }
+  }
+
+  void _showFullImage(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: InteractiveViewer(
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.error);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Photos'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('patients').doc(patientId).get(),
-        builder: (context, patientSnapshot) {
-          if (patientSnapshot.connectionState == ConnectionState.waiting) {
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('patients')
+            .doc(patientId)
+            .collection('photos')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (patientSnapshot.hasError) {
-            return Center(child: Text('Error: ${patientSnapshot.error}'));
+          if (snapshot.hasError) {
+            return Center(child: Text('Erreur: ${snapshot.error}'));
           }
 
-          if (!patientSnapshot.hasData || !patientSnapshot.data!.exists) {
-            return Center(child: Text('Patient not found'));
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('Aucune photo disponible'));
           }
 
-          var patientData = patientSnapshot.data!;
-          var patientName = '${patientData['Nom']} ${patientData['Prenom']}';
+          var photoDocs = snapshot.data!.docs;
 
-          // Fetch photos URLs from Firestore
-          var photosRef = FirebaseFirestore.instance.collection('photos');
-          return StreamBuilder<QuerySnapshot>(
-            stream: photosRef.where('patientId', isEqualTo: patientId).snapshots(),
-            builder: (context, photosSnapshot) {
-              if (photosSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+          return ListView.builder(
+            itemCount: photoDocs.length,
+            itemBuilder: (context, index) {
+              var photoDoc = photoDocs[index];
+              var photoData = photoDoc.data() as Map<String, dynamic>;
+              var photoUrl = photoData['url'] as String?;
+              var photoId = photoDoc.id;
 
-              if (photosSnapshot.hasError) {
-                return Center(child: Text('Error: ${photosSnapshot.error}'));
-              }
-
-              var photoDocs = photosSnapshot.data?.docs ?? [];
-              if (photoDocs.isEmpty) {
-                return Center(child: Text('No photos found'));
-              }
-
-              return ListView.builder(
-                itemCount: photoDocs.length,
-                itemBuilder: (context, index) {
-                  var photo = photoDocs[index];
-                  var description = photo['description'] ?? '';
-                  var photoUrl = photo['url'];
-
-                  return ListTile(
-                    title: Text('Photo ${index + 1}'),
-                    subtitle: Text(description),
-                    leading: Image.network(
-                      photoUrl,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.error);
-                      },
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '${photoData['position'] ?? 'Pas de Position'}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (photoUrl != null) {
+                        _showFullImage(context, photoUrl);
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(8.0),
+                      height: 200,
+                      color: Colors.grey[200],
+                      child: photoUrl != null
+                          ? Image.network(
+                        photoUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(Icons.error);
+                        },
+                      )
+                          : Center(child: Text('Aucune photo disponible')),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () => _deletePhoto(context, photoId),
+                  ),
+                  Divider(),
+                ],
               );
             },
           );
@@ -78,10 +136,4 @@ class ViewPhotosPage extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: ViewPhotosPage(doctorId: 'doctorId', patientId: 'patientId'),
-  ));
 }

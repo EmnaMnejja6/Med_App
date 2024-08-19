@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:enis/user_auth/firebase_implementation/firebase_auth_services.dart';
 
 class AddDoctor extends StatefulWidget {
@@ -17,7 +16,6 @@ class _AddDoctorState extends State<AddDoctor> {
   final prenomController = TextEditingController();
   final mailController = TextEditingController();
   final passwordController = TextEditingController();
-  String selectedSpecialite = "churigien";
   final FirebaseAuthServices _authServices = FirebaseAuthServices();
 
   @override
@@ -35,7 +33,7 @@ class _AddDoctorState extends State<AddDoctor> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("Ajouter un Docteur"),
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xFF084cac),
         ),
         body: Container(
           margin: EdgeInsets.all(20),
@@ -103,42 +101,11 @@ class _AddDoctorState extends State<AddDoctor> {
                   controller: passwordController,
                 ),
                 SizedBox(height: 10),
-                DropdownButtonFormField(
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'ophtalmologue',
-                      child: Text("Ophtalmologue"),
-                    ),
-                    DropdownMenuItem(
-                      value: 'churigien',
-                      child: Text("Churigien"),
-                    ),
-                    DropdownMenuItem(
-                      value: 'nephrologue',
-                      child: Text("Nephrologue"),
-                    ),
-                    DropdownMenuItem(
-                      value: 'cardiologue',
-                      child: Text("Cardiologue"),
-                    ),
-                  ],
-                  decoration: InputDecoration(border: OutlineInputBorder()),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedSpecialite = value!;
-                    });
-                  },
-                  value: 'churigien',
-                ),
-                SizedBox(
-                  height: 10,
-                ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
+                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -146,37 +113,22 @@ class _AddDoctorState extends State<AddDoctor> {
                         final prenom = prenomController.text;
                         final mail = mailController.text;
                         final password = passwordController.text;
-                        final specialite = selectedSpecialite;
                         print("$nom $prenom ");
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Envoi en cours")),
                         );
                         FocusScope.of(context).requestFocus(FocusNode());
                         try {
-                          // Sign up the new user with FirebaseAuth
                           User? user = await _authServices.signUpWithEmailAndPassword(
-                            mail,
-                            password,
-                            'doctor',
+                              mail,
+                              password,
+                              'doctor',
+                              nom,
+                              prenom
                           );
-                          if (user != null) {
-                            // Use the user's UID as the document ID in Firestore
-                            String uid = user.uid;
-                            // Add the new user's data to Firestore
-                            await FirebaseFirestore.instance
-                                .collection('doctor')
-                                .doc(uid)
-                                .set({
-                              'nom': nom,
-                              'prenom': prenom,
-                              'mail': mail,
-                              'specialite': specialite,
-                              'password': password,
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Docteur ajouté avec succès")),
-                            );
-                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Docteur ajouté avec succès")),
+                          );
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Erreur: $error")),

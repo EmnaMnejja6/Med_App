@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enis/pages/Admin/AdminManagement4Admin.dart';
+import 'package:enis/pages/Admin/ApprovalRequestPage4Admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:enis/pages/Admin/MonprofilAdmin.dart';
@@ -92,9 +93,11 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Admin '),
+        appBar: AppBar(
+        backgroundColor: Color(0xFF084cac),
+        title: Text("AdminPanel"),
       ),
+  
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -127,28 +130,45 @@ class _AdminPanelState extends State<AdminPanel> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.dashboard),
+              title: Text('Approval Requests'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CombinedRequestsPage4Admin()));
+              },
+            ),
+            ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Déconnexion'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewHomePage()));
+                    MaterialPageRoute(builder: (context) => HomePage()));
               },
             ),
           ],
         ),
       ),
-      body: GridView.count(
-        crossAxisCount: 2, // Number of columns in the grid
-        children: [
-          buildGridItem("Admin", Icons.admin_panel_settings_sharp, Colors.green,
-              context, ManageAdmin4Admin()),
-          buildGridItem("Doctors", Icons.medical_information,
-              Color.fromARGB(255, 255, 95, 20), context, ManageDoctors()),
-          buildGridItem(
-              "Patients", Icons.people, Colors.blue, context, ManagePatients()),
-        ],
+ 
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Adjust grid item size based on screen width
+          double itemSize = constraints.maxWidth / 4 - 16; // 4 items per row with margin
+          return GridView.count(
+            crossAxisCount: (constraints.maxWidth < 600) ? 2 : 4, // Adjust crossAxisCount based on screen width
+            childAspectRatio: (constraints.maxWidth < 600) ? 1 : 1.2, // Adjust aspect ratio for responsiveness
+            children: [
+              buildGridItem("Doctors", Icons.medical_information,
+                  Color(0xffea8707), context, ManageDoctors()),
+              buildGridItem(
+                  "Patients", Icons.people, Color(
+                  0xff07d140), context, ManagePatients()),
+            ],
+          );
+        },
       ),
     );
   }
 }
+

@@ -156,7 +156,7 @@ class _MonprofilSuperAdminState extends State<MonprofilSuperAdmin> {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -181,7 +181,7 @@ class _MonprofilSuperAdminState extends State<MonprofilSuperAdmin> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Color(0xFF084cac),
                 ),
               ),
               const SizedBox(height: 10),
@@ -214,7 +214,7 @@ class _MonprofilSuperAdminState extends State<MonprofilSuperAdmin> {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   updatePassword();

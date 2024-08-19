@@ -7,12 +7,12 @@ import 'ApprovalRequest.dart';
 import 'package:enis/user_auth/presentation/newlogin.dart';
 import 'package:get/get.dart';
 
-class CombinedRequestsPage extends StatefulWidget {
+class CombinedRequestsPage4Admin extends StatefulWidget {
   @override
-  _CombinedRequestsPageState createState() => _CombinedRequestsPageState();
+  _CombinedRequestsPage4AdminState createState() => _CombinedRequestsPage4AdminState();
 }
 
-class _CombinedRequestsPageState extends State<CombinedRequestsPage> with SingleTickerProviderStateMixin {
+class _CombinedRequestsPage4AdminState extends State<CombinedRequestsPage4Admin> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final FirebaseAuthServices _authServices = FirebaseAuthServices();
   final ManageEmails _emailService = ManageEmails();
@@ -29,7 +29,7 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
     super.dispose();
   }
 
-  // Approve New Account
+  // Approuver un nouveau compte
   Future<void> _approveUser(BuildContext context,
       ApprovalRequest request) async {
     try {
@@ -47,16 +47,14 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
           .delete();
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('User approved successfully'),
+        content: Text('Utilisateur approuvé avec succès'),
       ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error: $e'),
+        content: Text('Erreur : $e'),
       ));
     }
   }
-
-  // Reject New Account
   Future<void> _rejectUser(BuildContext context,
       ApprovalRequest request) async {
     try {
@@ -66,11 +64,11 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
           .delete();
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('User rejected successfully'),
+        content: Text('Utilisateur refusé avec succès '),
       ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error: $e'),
+        content: Text('Erreur : $e'),
       ));
     }
   }
@@ -79,13 +77,16 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
   /*****************PATIENTS**********************/
   Future<void> _rejectDeletePatientRequest(BuildContext context, String requestId) async {
     try {
-      await FirebaseFirestore.instance.collection('deletionRequests').doc(requestId).delete();
+      print('Tentative de rejet et suppression de la demande avec l\'ID : $requestId');
+      await FirebaseFirestore.instance.collection('patientDeletionRequests').doc(requestId).delete();
+      print('Demande avec l\'ID $requestId supprimée avec succès');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Request rejected and deleted')),
+        SnackBar(content: Text('Demande rejetée et supprimée')),
       );
     } catch (error) {
+      print('Erreur lors du rejet et suppression de la demande avec l\'ID $requestId : $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to reject and delete request: $error')),
+        SnackBar(content: Text('Échec du rejet et suppression de la demande : $error')),
       );
     }
   }
@@ -100,34 +101,39 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
         String patientPrenom = documentSnapshot.get('patientPrenom');
         return {'patientNom': patientNom, 'patientPrenom': patientPrenom};
       } else {
-        print('No such document!');
+        print('Document introuvable !');
         return {};
       }
     } catch (e) {
-      print('Error fetching patient credentials: $e');
+      print('Erreur lors de la récupération des informations du patient : $e');
       return {};
     }
   }
 
   Future<void> _approveDeletePatientRequest(BuildContext context, String requestId, String targetUid) async {
     try {
+      print('Tentative d\'approbation de la demande de suppression avec l\'ID : $requestId pour le patient avec l\'ID : $targetUid');
       Map<String, String> credentials = await getPatientsCredentials(targetUid);
       String patientNom = credentials['patientNom'] ?? '';
       String patientPrenom = credentials['patientPrenom'] ?? '';
 
       if (patientNom.isEmpty || patientPrenom.isEmpty) {
-        throw Exception('Failed to fetch patientNom or patientPrenom');
+        throw Exception('Impossible de trouver le nom ou prénom du patient');
       }
 
-      await FirebaseFirestore.instance.collection('deletionRequests').doc(requestId).delete();
+      await FirebaseFirestore.instance.collection('patientDeletionRequests').doc(requestId).delete();
+      print('Demande avec l\'ID $requestId supprimée avec succès');
       await FirebaseFirestore.instance.collection('patients').doc(targetUid).delete();
+      print('Patient avec l\'ID $targetUid supprimé avec succès');
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Patient supprimé avec succès')),
       );
-
     } catch (e) {
-      print("error $e");
+      print('Erreur lors de l\'approbation et suppression du patient avec l\'ID $targetUid : $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Échec de l\'approbation et suppression du patient : $e')),
+      );
     }
   }
 
@@ -154,76 +160,57 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
       }
       return requests;
     } catch (e) {
-      print('Error fetching deletion requests: $e');
+      print('Erreur lors de la récupération des demandes de suppression : $e');
       return [];
     }
   }
 
-  //Build the Patient Deletion Tab
-  Widget _buildPatientDeletionRequestsTab(BuildContext context, List<Map<String, dynamic>> requests) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Deletion Requests'),
-        bottom: TabBar(
-          tabs: [
-            Tab(text: 'Patient Deletion Requests'),
-            Tab(text: 'Image Deletion Requests'),
-          ],
-          controller: _tabController,
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchPatientDeletionRequests(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No deletion requests found'));
-              } else {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    var request = snapshot.data![index];
-                    var requestId = request['requestId'];
-                    var patientId = request['targetUid'];
-                    var patientNom = request['patientNom'];
-                    var patientPrenom = request['patientPrenom'];
-                    return Card(
-                      child: ListTile(
-                        title: Text('Patient Name: $patientNom $patientPrenom'),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.check, color: Colors.green),
-                              onPressed: () => _approveDeletePatientRequest(context, requestId, patientId),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.close, color: Colors.red),
-                              onPressed: () => _rejectDeletePatientRequest(context, requestId),
-                            ),
-                          ],
-                        ),
+  // Construire l'onglet des demandes de suppression de patients
+  Widget _buildPatientDeletionRequestsTab(BuildContext context) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: fetchPatientDeletionRequests(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Erreur : ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Aucune demande de suppression trouvée'));
+        } else {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              var request = snapshot.data![index];
+              var requestId = request['requestId'];
+              var patientId = request['targetUid'];
+              var patientNom = request['patientNom'];
+              var patientPrenom = request['patientPrenom'];
+              return Card(
+                child: ListTile(
+                  title: Text('Nom du patient : $patientNom $patientPrenom'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.check, color: Colors.green),
+                        onPressed: () => _approveDeletePatientRequest(context, requestId, patientId),
                       ),
-                    );
-                  },
-                );
-              }
+                      IconButton(
+                        icon: Icon(Icons.close, color: Colors.red),
+                        onPressed: () => _rejectDeletePatientRequest(context, requestId),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
-          ),
-          // Placeholder for the second tab
-          Center(child: Text('Image Deletion Requests')),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 
-  // Build the New Accounts Requests Tab
+  // Construire l'onglet des demandes de nouveaux comptes
   Widget _buildApprovalRequestsTab(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -235,10 +222,10 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
           return Center(child: CircularProgressIndicator());
         }
         if (streamSnapshot.hasError) {
-          return Center(child: Text('Error: ${streamSnapshot.error}'));
+          return Center(child: Text('Erreur : ${streamSnapshot.error}'));
         }
         if (!streamSnapshot.hasData || streamSnapshot.data!.docs.isEmpty) {
-          return Center(child: Text('No approval requests found'));
+          return Center(child: Text('Aucune demande d\'approbation trouvée'));
         }
 
         var requests = streamSnapshot.data!.docs;
@@ -251,10 +238,8 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
 
             return Card(
               child: ListTile(
-                title: Text('Request to create a new account'),
-                subtitle: Text('Name: ${request.firstName} ${request
-                    .lastName}\nEmail: ${request.email}\nRole: ${request
-                    .role}'),
+                title: Text('Demande de création d\'un nouveau compte'),
+                subtitle: Text('Nom : ${request.firstName} ${request.lastName}\nEmail : ${request.email}\nRôle : ${request.role}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -282,13 +267,12 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Requests"),
+        title: const Text("Demandes"),
         bottom: TabBar(
 
           controller: _tabController,
           tabs: [
             Tab(text: "Nouveaux Comptes"),
-            Tab(text: "Suppression du compte SA"),
             Tab(text: "Suppression des patients"),
           ],
         ),
@@ -297,21 +281,7 @@ class _CombinedRequestsPageState extends State<CombinedRequestsPage> with Single
         controller: _tabController,
         children: [
           _buildApprovalRequestsTab(context),
-          //patients tab
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetchPatientDeletionRequests(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No deletion requests found'));
-              } else {
-                return _buildPatientDeletionRequestsTab(context, snapshot.data!);
-              }
-            },
-          ),
+          _buildPatientDeletionRequestsTab(context),
         ],
       ),
     );

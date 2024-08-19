@@ -17,7 +17,7 @@ class _ManageAdmin4SuperAdminState extends State<ManageAdmin4SuperAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Admins list")),
+      appBar: AppBar(title: const Text("Liste des admins")),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -30,18 +30,18 @@ class _ManageAdmin4SuperAdminState extends State<ManageAdmin4SuperAdmin> {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  print('StreamBuilder Error: ${snapshot.error}');
+                  print('Erreur du StreamBuilder: ${snapshot.error}');
                   return Center(
-                      child: Text('StreamBuilder Error: ${snapshot.error}'));
+                      child: Text('Erreur du StreamBuilder: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  print('No admins found');
-                  return Center(child: Text('No admins found'));
+                  print('Aucun admin trouvé');
+                  return Center(child: Text('Aucun admin trouvé'));
                 }
 
                 var admins = snapshot.data!.docs;
 
-                print('Number of admins: ${admins.length}');
+                print('Nombre d\'admins: ${admins.length}');
 
                 return ListView.builder(
                   itemCount: admins.length,
@@ -65,10 +65,10 @@ class _ManageAdmin4SuperAdminState extends State<ManageAdmin4SuperAdmin> {
                                 Icons.edit,
                                 color: Colors.blue,
                               ),
-                              tooltip: 'Modify',
+                              tooltip: 'Modifier',
                               onPressed: () {
-                                // Implement edit functionality
-                                // Example: Navigator.push to edit page
+                                // Implémenter la fonctionnalité de modification
+                                // Exemple: Navigator.push vers la page de modification
                               },
                             ),
                             IconButton(
@@ -76,27 +76,27 @@ class _ManageAdmin4SuperAdminState extends State<ManageAdmin4SuperAdmin> {
                                 Icons.delete,
                                 color: Colors.red,
                               ),
-                              tooltip: 'Delete',
+                              tooltip: 'Supprimer',
                               onPressed: () {
-                                //Delete from auth
+                                // Supprimer de l'authentification
                                 _deleteAdmin(docId, email, password);
-                                // Delete document from Firestore
+                                // Supprimer le document de Firestore
                                 FirebaseFirestore.instance
                                     .collection('admin')
                                     .doc(docId)
                                     .delete()
                                     .then((_) => print(
-                                        'Document with ID $docId deleted'))
+                                        'Document avec ID $docId supprimé'))
                                     .catchError((error) => print(
-                                        'Failed to delete document: $error'));
+                                        'Échec de la suppression du document: $error'));
                                 FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(docId)
                                     .delete()
                                     .then((_) => print(
-                                    'Document with ID $docId deleted'))
+                                    'Document avec ID $docId supprimé'))
                                     .catchError((error) => print(
-                                    'Failed to delete document: $error'));
+                                    'Échec de la suppression du document: $error'));
                               },
                             ),
                           ],
@@ -123,20 +123,20 @@ class _ManageAdmin4SuperAdminState extends State<ManageAdmin4SuperAdmin> {
 
   Future<void> _deleteAdmin(String docId, String email, String password) async {
     try {
-      // Delete admin document from 'admin' collection
+      // Supprimer le document de l'admin de la collection 'admin'
       await FirebaseFirestore.instance.collection('admin').doc(docId).delete();
 
-      // Delete user entry from 'users' collection
+      // Supprimer l'entrée de l'utilisateur de la collection 'users'
       await FirebaseFirestore.instance.collection('users').doc(docId).delete();
 
-      // Delete user from Firebase Authentication
+      // Supprimer l'utilisateur de l'authentification Firebase
       await _authServices.deleteUser(email, password);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Admin supprimé avec succès')),
       );
     } catch (error) {
-      print('Failed to delete admin: $error');
+      print('Échec de la suppression de l\'admin: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur lors de la suppression de l\'admin')),
       );

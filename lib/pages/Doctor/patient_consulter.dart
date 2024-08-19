@@ -48,7 +48,7 @@ class _PatientPageState extends State<PatientPage> {
       });
       _fetchPatientInfo();
     } catch (e) {
-      print('Error loading credentials: $e');
+      print('Erreur de chargement des informations d\'authentification: $e');
     }
   }
 
@@ -80,36 +80,35 @@ class _PatientPageState extends State<PatientPage> {
             _alternativeTechnique = patientData['AlternativeTechnique'];
             _cormackLehaneGrade = patientData['CormackLehaneGrade'];
           });
-          print('Patient info fetched: $_nom $_prenom $_dateDeNaissance, Adresse: $_adresse');
+          print('Informations sur le patient récupérées: $_nom $_prenom $_dateDeNaissance, Adresse: $_adresse');
         } else {
-          print('No patient data found');
+          print('Aucune donnée sur le patient trouvée');
         }
       } else {
-        print('Patient document does not exist');
+        print('Le document patient n\'existe pas');
       }
     } catch (e) {
-      print('Error fetching patient info: $e');
+      print('Erreur lors de la récupération des informations du patient: $e');
     }
   }
 
-
   Future<void> _deletePatient(String targetUid) async {
     try {
-      // Get the current user's UID
+      // Obtenez l'UID de l'utilisateur actuel
       String requesterUid = await getCurrentUserUid();
 
-      // Create a new deletion request
+      // Créez une nouvelle demande de suppression
       await FirebaseFirestore.instance.collection('patientDeletionRequests').add({
         'requesterUid': requesterUid,
         'targetUid': targetUid,
         'status': 'pending',
       });
 
-      print('Deletion request added successfully');
+      print('Demande de suppression ajoutée avec succès');
 
     } catch (e) {
-      // Handle any errors that occur
-      print('Failed to add deletion request: $e');
+      // Gérez les erreurs qui se produisent
+      print('Échec de l\'ajout de la demande de suppression: $e');
     }
   }
 
@@ -141,7 +140,7 @@ class _PatientPageState extends State<PatientPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Fiche Patient'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -149,7 +148,7 @@ class _PatientPageState extends State<PatientPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Patient Info Section
+              // Section Informations Patient
               Card(
                 elevation: 4,
                 margin: EdgeInsets.symmetric(vertical: 8),
@@ -176,12 +175,12 @@ class _PatientPageState extends State<PatientPage> {
                 ),
               ),
               SizedBox(height: 20),
-              // Actions Section
+              // Section Actions
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed:  _showPhotoDialog,
+                    onPressed: _showPhotoDialog,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -191,7 +190,7 @@ class _PatientPageState extends State<PatientPage> {
                       ],
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Color(0xFF084cac),
                       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     ),
                   ),
@@ -209,8 +208,8 @@ class _PatientPageState extends State<PatientPage> {
                           ),
                         );
                       } else {
-                        print('GoogleDriveService is not initialized');
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google Drive Service not available')));
+                        print('GoogleDriveService n\'est pas initialisé');
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Service Google Drive non disponible')));
                       }
                     },
                     child: Row(
@@ -222,7 +221,7 @@ class _PatientPageState extends State<PatientPage> {
                       ],
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Color(0xFF084cac),
                       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     ),
                   ),
@@ -230,10 +229,12 @@ class _PatientPageState extends State<PatientPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: (){ _deletePatient(widget.patientId);
+                onPressed: () {
+                  _deletePatient(widget.patientId);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Une demande de suppression a été envoyée')),
-                  );},
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

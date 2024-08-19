@@ -32,7 +32,7 @@ class _AddSuperAdminState extends State<AddSuperAdmin> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("Ajouter un Super Admin"),
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xFF084cac),
         ),
         body: Container(
           margin: EdgeInsets.all(20),
@@ -104,7 +104,7 @@ class _AddSuperAdminState extends State<AddSuperAdmin> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -131,7 +131,7 @@ class _AddSuperAdminState extends State<AddSuperAdmin> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Erreur: $error")),
                           );
-                          print("Error adding superadmin: $error");
+                          print("Erreur d'ajout du superadmin: $error");
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(

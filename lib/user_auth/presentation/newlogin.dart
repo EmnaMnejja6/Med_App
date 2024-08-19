@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enis/pages/Admin/adminpanel.dart';
 import 'package:enis/pages/Doctor/home_doctor.dart';
-import 'package:enis/pages/Super%20Admin/super_admin_panel.dart';
+import 'package:enis/pages/SuperAdmin/super_admin_panel.dart';
 
 import '../../user_auth/firebase_implementation/firebase_auth_services.dart';
-import '../../pages/Super%20Admin/super_admin_panel.dart';
+import '../../pages/SuperAdmin/super_admin_panel.dart';
 
-class Newlogin extends StatefulWidget {
-  const Newlogin({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Newlogin> createState() => _NewloginState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _NewloginState extends State<Newlogin> {
+class _LoginPageState extends State<LoginPage> {
   final FirebaseAuthServices _auth = FirebaseAuthServices();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -128,7 +128,7 @@ class _NewloginState extends State<Newlogin> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 30,),
-             const Text(
+             /*const Text(
               "MedApp",
               style: TextStyle(
                 color: Colors.white,
@@ -136,7 +136,7 @@ class _NewloginState extends State<Newlogin> {
                 fontSize: 40,
                 letterSpacing: 2,
               ),
-            ),
+            )*/
           Padding(
             padding: const EdgeInsets.only(top:0.0),
             child: Image.asset(
@@ -200,7 +200,7 @@ class _NewloginState extends State<Newlogin> {
             child: Text(
               "Vous n'avez pas de compte? Inscrivez-vous",
               style: TextStyle(
-                color: Colors.blue,
+                color: Color(0xFF084cac),
                 fontSize: 16.0,
               ),
             ),

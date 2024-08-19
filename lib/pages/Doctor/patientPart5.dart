@@ -86,7 +86,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         _googleDriveService = GoogleDriveService(credentialsJson);
       }
     } catch (e) {
-      print('Error initializing Google Drive service: $e');
+      print('Erreur d\'initialiser Google Drive service: $e');
     }
   }
 
@@ -109,9 +109,9 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         await uploadMobile.uploadImageMobile(widget.doctorId, widget.patientId, position,source: source);
       }
     } catch (e) {
-      print('Error uploading file: $e');
+      print('Erreur d\'enregistrer le fichier: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error uploading file: $e')),
+        SnackBar(content: Text('Erreur d\'enregistrer le fichier : $e')),
       );
     } finally {
       setState(() {
@@ -176,7 +176,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
               ),
               actions: [
                 TextButton(
-                  child: Text('Cancel'),
+                  child: Text('Annuler'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
@@ -191,12 +191,12 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Photos updated successfully!')),
+        SnackBar(content: Text('Photos mises à jour avec succès!')),
       );
     } catch (e) {
-      print('Error updating photos: $e');
+      print('Erreur mise à jour du photo: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating photos')),
+        SnackBar(content: Text('Erreur mise à jour du photo')),
       );
     } finally {
       setState(() {
@@ -218,7 +218,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Photos de l'enfant"),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -250,10 +250,10 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
                             children: [
                               Text(
                                 "Ajouter",
-                                style: TextStyle(color: Colors.blue),
+                                style: TextStyle(color: Color(0xFF084cac)),
                               ),
                               SizedBox(width: 5),
-                              Icon(Icons.upload, color: Colors.blue),
+                              Icon(Icons.upload, color: Color(0xFF084cac)),
                             ],
                           ),
                         ),

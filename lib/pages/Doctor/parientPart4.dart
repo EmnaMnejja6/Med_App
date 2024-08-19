@@ -59,7 +59,7 @@ class _IntubationDetailsPageState extends State<IntubationDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Induction et intubation oro-trachéale"),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF084cac),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -216,7 +216,7 @@ class _IntubationDetailsPageState extends State<IntubationDetailsPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {

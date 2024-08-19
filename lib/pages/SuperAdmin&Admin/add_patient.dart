@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddPatientPage extends StatefulWidget {
   const AddPatientPage({super.key});
@@ -32,7 +33,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Ajouter un patient"),
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xFF084cac),
         ),
         body: Container(
           margin: const EdgeInsets.all(20),
@@ -124,14 +125,24 @@ class _AddPatientPageState extends State<AddPatientPage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
+                      MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final nom = nomController.text;
                         final prenom = prenomController.text;
                         final adresse = adresseController.text;
                         final phone = phoneController.text;
+
+                        // Get the current logged-in doctor's ID
+                        final doctorId = FirebaseAuth.instance.currentUser?.uid;
+
+                        if (doctorId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Erreur: utilisateur non connecté")),
+                          );
+                          return;
+                        }
 
                         print("$nom $prenom $adresse $phone");
 
@@ -150,7 +161,8 @@ class _AddPatientPageState extends State<AddPatientPage> {
                           'DateNais': dateNaissance != null
                               ? Timestamp.fromDate(dateNaissance!)
                               : null,
-                          'avatar': nom + prenom
+                          'avatar': nom + prenom,
+                          'doctor': doctorId // Add the doctor ID here
                         }).then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -164,8 +176,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content:
-                              Text("Veuillez remplir tous les champs")),
+                              content: Text("Veuillez remplir tous les champs")),
                         );
                       }
                     },

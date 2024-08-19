@@ -51,7 +51,7 @@ class _MonprofilDoctorState extends State<MonprofilDoctor> {
             email: email,
             password: _oldPasswordController.text,
           );
-          print('Reauthentication successful');
+          print('Reauthentication réussie');
 
           // Update the password
           await user.updatePassword(_newPasswordController.text);
@@ -67,14 +67,14 @@ class _MonprofilDoctorState extends State<MonprofilDoctor> {
             ),
           );
         } on FirebaseAuthException catch (e) {
-          print('Error during password update: ${e.message}');
+          print('Erreur lors du mis à jour du mot de passe : ${e.message}');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur: ${e.message}'),
             ),
           );
         } catch (e) {
-          print('Unexpected error: $e');
+          print('Erreur inattendue: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur inattendue: $e'),
@@ -172,7 +172,7 @@ class _MonprofilDoctorState extends State<MonprofilDoctor> {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -199,7 +199,7 @@ class _MonprofilDoctorState extends State<MonprofilDoctor> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Color(0xFF084cac),
                 ),
               ),
               const SizedBox(height: 10),
@@ -232,7 +232,7 @@ class _MonprofilDoctorState extends State<MonprofilDoctor> {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   updatePassword();

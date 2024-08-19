@@ -21,16 +21,16 @@ class HomeDoctor extends StatelessWidget {
               Container(
                 height: MediaQuery.of(context).size.height * 0.40,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color(0xFF084cac),
                   image: DecorationImage(
                     fit: BoxFit.contain,
-                    image: AssetImage("assets/images/logo.jpg"),
+                    image: AssetImage("assets/images/hospital.jpg"),
                   ),
                 ),
               ),
               SizedBox(height: 20),
               Text(
-                "Bienvenu Docteur",
+                "Bienvenu Docteur" ,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
@@ -39,13 +39,17 @@ class HomeDoctor extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              Text(
-                "Nous sommes ravis de vous voir !",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w400,
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Cette étude prospective descriptive vise à prédire à l'aide de l'IA le risque d'intubation difficile chez les enfants âgés de 2 mois à 6 ans, proposés pour une intervention chirurgicale sous anesthésie générale avec intubation oro-trachéale.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    height: 2,
+                    fontSize: 18,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             ],
@@ -87,7 +91,7 @@ class _NavbarDoctorState extends State<NavbarDoctor> {
         setState(() {
           _name = userDoc['prenom'] + ' ' + userDoc['nom'];
           _email = userDoc['mail'];
-          _uid = uid; // Set the doctor's UID
+          _uid = uid;
         });
       }
     }
@@ -109,7 +113,7 @@ class _NavbarDoctorState extends State<NavbarDoctor> {
               ),
             ),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Color(0xFF084cac),
             ),
           ),
           ListTile(
@@ -137,7 +141,7 @@ class _NavbarDoctorState extends State<NavbarDoctor> {
             title: Text("Déconnexion"),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NewHomePage()));
+                  MaterialPageRoute(builder: (context) => HomePage()));
             },
           ),
         ],

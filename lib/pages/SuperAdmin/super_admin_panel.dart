@@ -1,19 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enis/pages/Super%20Admin/ApprovalRequestPage.dart';
+import 'package:enis/pages/SuperAdmin/ApprovalRequestPage4SuperAdmin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:enis/pages/Super%20Admin/SuperAdminManagment.dart';
+import 'package:enis/pages/SuperAdmin/SuperAdminManagment.dart';
 import 'package:enis/pages/SuperAdmin&Admin/DoctorManagement.dart';
 import 'package:enis/pages/SuperAdmin&Admin/PatientManagement.dart';
-import 'package:enis/pages/Super%20Admin/AdminManagement4SuperAdmin.dart';
-import 'package:enis/pages/Super%20Admin/MonProfilSuperAdmin.dart';
-import 'package:enis/pages/Super%20Admin/ApprovalRequest.dart';
+import 'package:enis/pages/SuperAdmin/AdminManagement4SuperAdmin.dart';
+import 'package:enis/pages/SuperAdmin/MonProfilSuperAdmin.dart';
+import 'package:enis/pages/SuperAdmin/ApprovalRequest.dart';
 
 import '../home_page .dart';
 
 String? getCurrentUserUid() {
   User? user = FirebaseAuth.instance.currentUser;
-  print('Current user UID: ${user?.uid}');
+  print('Utilisateur courrant : UID: ${user?.uid}');
   return user?.uid;
 }
 
@@ -24,14 +24,14 @@ Future<Map<String, dynamic>?> fetchSuperAdminData(String uid) async {
         .doc(uid)
         .get();
     if (superadminData.exists) {
-      print('Superadmin data found: ${superadminData.data()}');
+      print('Superadmin data trouvé: ${superadminData.data()}');
       return superadminData.data() as Map<String, dynamic>?;
     } else {
-      print('No superadmin data found for UID: $uid');
+      print('Data superadmin introuvable UID: $uid');
       return null;
     }
   } catch (e) {
-    print('Error fetching superadmin data: $e');
+    print('Erreur fetching superadmin data: $e');
     return null;
   }
 }
@@ -58,11 +58,11 @@ class _SuperAdminPanelState extends State<SuperAdminPanel> {
             superadminEmail = data['mail'] ?? 'No Email';
           });
         } else {
-          print('Data is null for UID: $uid');
+          print('Data est null for UID: $uid');
         }
       });
     } else {
-      print('UID is null');
+      print('UID est null');
     }
   }
 
@@ -156,7 +156,7 @@ class _SuperAdminPanelState extends State<SuperAdminPanel> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CombinedRequestsPage()));
+                        builder: (context) => CombinedRequestsPage4SuperAdmin()));
               },
             ),
             ListTile(

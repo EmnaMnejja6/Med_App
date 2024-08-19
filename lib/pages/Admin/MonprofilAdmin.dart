@@ -74,19 +74,19 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
       if (user != null) {
         String email = user.email!;
         try {
-          // Reauthenticate the user
+          // Réauthentifier l'utilisateur
           UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: email,
             password: _oldPasswordController.text,
           );
-          print('Reauthentication successful');
+          print('Réauthentification réussie');
 
-          // Update the password
+          // Mettre à jour le mot de passe
           await user.updatePassword(_newPasswordController.text);
 
-          // Update password in Firestore admin collection
+          // Mettre à jour le mot de passe dans la collection admin de Firestore
           await FirebaseFirestore.instance.collection('admin').doc(user.uid).update({
-            'password': _newPasswordController.text, // Ensure this field exists in Firestore and is used appropriately
+            'password': _newPasswordController.text, // Assurez-vous que ce champ existe dans Firestore et est utilisé correctement
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -95,17 +95,17 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
             ),
           );
         } on FirebaseAuthException catch (e) {
-          print('Error during password update: ${e.message}');
+          print('Erreur lors de la mise à jour du mot de passe : ${e.message}');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Erreur: ${e.message}'),
+              content: Text('Erreur : ${e.message}'),
             ),
           );
         } catch (e) {
-          print('Unexpected error: $e');
+          print('Erreur inattendue : $e');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Erreur inattendue: $e'),
+              content: Text('Erreur inattendue : $e'),
             ),
           );
         }
@@ -124,7 +124,6 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
       );
     }
   }
-
 
   @override
   void dispose() {
@@ -149,9 +148,9 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              Text('Prénom: $firstName'),
-              Text('Nom: $lastName'),
-              Text('Email: $email'),
+              Text('Prénom : $firstName'),
+              Text('Nom : $lastName'),
+              Text('Email : $email'),
               TextFormField(
                 controller: _addressController,
                 decoration: InputDecoration(labelText: 'Adresse'),
@@ -176,7 +175,7 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -203,7 +202,7 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue, // Change text color to blue
+                  color: Color(0xFF084cac)
                 ),
               ),
               const SizedBox(height: 10),
@@ -236,7 +235,7 @@ class _MonprofilAdminState extends State<MonprofilAdmin> {
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF084cac),
                 ),
                 onPressed: () {
                   updatePassword();

@@ -24,7 +24,7 @@ class _ManageAdmin4AdminState extends State<ManageAdmin4Admin> {
           Flexible(
             child: StreamBuilder<QuerySnapshot>(
               stream:
-                  FirebaseFirestore.instance.collection('admin').snapshots(),
+              FirebaseFirestore.instance.collection('admin').snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -51,7 +51,8 @@ class _ManageAdmin4AdminState extends State<ManageAdmin4Admin> {
                     var nom = admin['nom'];
                     var prenom = admin['prenom'];
                     var email = admin['mail'];
-                    var password = admin['password'];
+                    var adresse = admin['adresse'];
+                    var tel = admin['tel'];
                     print('Admin: $nom $prenom');
 
                     return Card(
@@ -63,12 +64,11 @@ class _ManageAdmin4AdminState extends State<ManageAdmin4Admin> {
                             IconButton(
                               icon: const Icon(
                                 Icons.edit,
-                                color: Colors.blue,
+                                color: Color(0xFF084cac),
                               ),
                               tooltip: 'Modify',
                               onPressed: () {
-                                // Implement edit functionality
-                                // Example: Navigator.push to edit page
+                                _showUpdateDialog(docId, adresse, tel);
                               },
                             ),
                           ],
@@ -108,9 +108,67 @@ class _ManageAdmin4AdminState extends State<ManageAdmin4Admin> {
         SnackBar(content: Text('Admin supprimé avec succès')),
       );
     } catch (error) {
-      print('Failed to delete admin: $error');
+      print('EErreur lors de la suppression de l\'admin: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur lors de la suppression de l\'admin')),
+      );
+    }
+  }
+
+  Future<void> _showUpdateDialog(String docId, String adresse, String tel) async {
+    TextEditingController adresseController = TextEditingController(text: adresse);
+    TextEditingController telController = TextEditingController(text: tel);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Mettre à jour Admin'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: adresseController,
+                decoration: InputDecoration(labelText: 'Adresse'),
+              ),
+              TextField(
+                controller: telController,
+                decoration: InputDecoration(labelText: 'Téléphone'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _updateAdmin(docId, adresseController.text, telController.text);
+                Navigator.pop(context);
+              },
+              child: Text('Mettre à jour'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _updateAdmin(String docId, String adresse, String tel) async {
+    try {
+      await FirebaseFirestore.instance.collection('admin').doc(docId).update({
+        'adresse': adresse,
+        'tel': tel,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Mise à jour avec succés')),
+      );
+    } catch (error) {
+      print('Failed to update admin: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erreur de mise à jour')),
       );
     }
   }

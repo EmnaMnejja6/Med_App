@@ -33,7 +33,7 @@ class _AddAdminState extends State<AddAdmin> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("Ajouter un Admin"),
-          backgroundColor: Colors.blue,
+          backgroundColor: Color(0xFF084cac),
         ),
         body: Container(
           margin: EdgeInsets.all(20),
@@ -106,7 +106,7 @@ class _AddAdminState extends State<AddAdmin> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                      MaterialStateProperty.all<Color>(Color(0xFF084cac)),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -123,42 +123,21 @@ class _AddAdminState extends State<AddAdmin> {
                         // Sign up the admin in Firebase Authentication
                         try {
                           User? user =
-                              await _authServices.signUpWithEmailAndPassword(
-                                  mail, password, 'admin');
+                          await _authServices.signUpWithEmailAndPassword(
+                              mail, password, 'admin', nom,prenom);
 
-                          // Sign up in Firestore
-                          if (user != null) {
-                            String uid = user.uid;
-                            CollectionReference adminRef =
-                                FirebaseFirestore.instance.collection("admin");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Admin ajouté avec succès"),
+                            ),
+                          );
 
-                            await adminRef.doc(uid).set({
-                              'nom': nom,
-                              'prenom': prenom,
-                              'mail': mail,
-                              'password': password
-                              // Optionally, you might want to exclude storing password in plaintext
-                            });
+                          // Clear form fields after successful submission
+                          nomController.clear();
+                          prenomController.clear();
+                          mailController.clear();
+                          passwordController.clear();
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Admin ajouté avec succès"),
-                              ),
-                            );
-
-                            // Clear form fields after successful submission
-                            nomController.clear();
-                            prenomController.clear();
-                            mailController.clear();
-                            passwordController.clear();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    "Erreur lors de la création de l'admin"),
-                              ),
-                            );
-                          }
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Erreur: $error")),

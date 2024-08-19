@@ -1,125 +1,132 @@
+import 'package:enis/user_auth/presentation/newlogin.dart';
 import 'package:flutter/material.dart';
-import 'package:enis/user_auth/presentation/login_page.dart';
-import '../user_auth/presentation/newlogin .dart';
 
-class NewHomePage extends StatefulWidget {
-  const NewHomePage({super.key});
-
-  @override
-  State<NewHomePage> createState() => _NewHomePageState();
-}
-
-class _NewHomePageState extends State<NewHomePage> {
-  bool inLoginProcess = false;
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = const Color.fromARGB(255, 33, 177, 243);
-    final Size mediaSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
             children: [
-              Container(
-                height: mediaSize.height * 0.30,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [primaryColor, Colors.blue.shade800],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: const AssetImage("assets/images/nn.jpg"),
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.3),
-                      BlendMode.dstATop,
+              ClipPath(
+                clipper: BottomRoundedClipper(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  width: double.infinity,
+                  color: Color(0xFF084cac),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/logo.png', // Replace with your logo asset path
+                      height: 300, // Adjust the height as needed
                     ),
                   ),
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 30),
-                      const Text(
-                        "Bienvenue sur MedApp",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "Votre partenaire pour une meilleure",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const Text(
-                        "pratique médicale",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
-              const SizedBox(height: 50),
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Text(
-                  "Bienvenu",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'MedApp',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF084cac),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Intérêt de l’intelligence artificielle dans la prédiction du risque d’intubation difficile chez l’enfant',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF084cac),
+                            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          ),
+                          child: Text(
+                            'Commencer',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    elevation: 5,
-                    shadowColor: primaryColor.withOpacity(0.4),
-                    minimumSize: Size(mediaSize.width * 0.85, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Newlogin(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.login, size: 24),
-                  label: const Text(
-                    "Se connecter",
-                    style: TextStyle(fontSize: 20),
                   ),
                 ),
               ),
             ],
           ),
-        ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.65 - 50,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF084cac),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Color(0xFF084cac),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
+}
+
+class BottomRoundedClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - 50);
+    path.quadraticBezierTo(
+      size.width / 2, size.height,
+      size.width, size.height - 50,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

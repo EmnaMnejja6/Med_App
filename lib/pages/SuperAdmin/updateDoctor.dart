@@ -42,7 +42,7 @@ class _UpdateDoctorState extends State<UpdateDoctor> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Profile updated')),
+      SnackBar(content: Text('Profil mis à jour !')),
     );
   }
 
@@ -51,17 +51,17 @@ class _UpdateDoctorState extends State<UpdateDoctor> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Profile'),
+          title: Text('Mettre à jour le Profil'),
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 TextField(
                   controller: phoneController,
-                  decoration: InputDecoration(labelText: 'Phone Number'),
+                  decoration: InputDecoration(labelText: 'Numéro de téléphone'),
                 ),
                 TextField(
                   controller: addressController,
-                  decoration: InputDecoration(labelText: 'Address'),
+                  decoration: InputDecoration(labelText: 'Adresse'),
                 ),
               ],
             ),
@@ -74,7 +74,7 @@ class _UpdateDoctorState extends State<UpdateDoctor> {
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: Text('Enregistrer'),
               onPressed: () {
                 _updateDoctor();
                 Navigator.of(context).pop();
@@ -90,14 +90,14 @@ class _UpdateDoctorState extends State<UpdateDoctor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile'),
+        title: Text('Mon Profil'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.edit,
-              color: Colors.blue,
+              color: Color(0xFF084cac),
             ),
-            tooltip: 'Modify',
+            tooltip: 'Modifier',
             onPressed: () {
               _showEditDialog(context);
             },
@@ -110,12 +110,12 @@ class _UpdateDoctorState extends State<UpdateDoctor> {
           children: [
             TextField(
               controller: phoneController,
-              decoration: InputDecoration(labelText: 'Phone Number'),
+              decoration: InputDecoration(labelText: 'Numéro de téléphone'),
               readOnly: true,
             ),
             TextField(
               controller: addressController,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: InputDecoration(labelText: 'Adresse'),
               readOnly: true,
             ),
           ],

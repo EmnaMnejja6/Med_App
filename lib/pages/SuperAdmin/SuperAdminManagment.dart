@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:enis/pages/Super%20Admin/add_super_admin.dart';
+import 'package:enis/pages/SuperAdmin/add_super_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../user_auth/firebase_implementation/firebase_auth_services.dart';
@@ -33,8 +33,8 @@ class _ManageSuperAdminState extends State<ManageSuperAdmin> {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  print('Error: ${snapshot.error}');
-                  return Center(child: Text('Error: ${snapshot.error}'));
+                  print('Erreur: ${snapshot.error}');
+                  return Center(child: Text('Erreur: ${snapshot.error}'));
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   print('Aucun superadmin trouvé');
@@ -102,12 +102,12 @@ class _ManageSuperAdminState extends State<ManageSuperAdmin> {
         'status': 'pending', // initial status
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Request sent for approval')),
+        SnackBar(content: Text('Demande envoyé pour l\'approuver')),
       );
     } catch (error) {
-      print('Failed to create approval request: $error');
+      print('Echec de creer la demande : $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to send request for approval')),
+        SnackBar(content: Text('Echec d\'envoyer la demande ')),
       );
     }
   }
