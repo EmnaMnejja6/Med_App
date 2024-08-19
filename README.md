@@ -19,3 +19,7 @@ MedApp is a mobile and web application designed for doctors in the pediatric sec
 - **Firebase**: Backend platform for building mobile and web applications, including authentication and database management.
 - **Google Drive API**: For managing file uploads and storage.
 
+## Developer Manual
+https://docs.google.com/document/d/1hEd-ilO-gne7oDwIdZgsm3m9WybvJ8UBywlCnessyh8/edit?usp=sharing
+## User guide
+https://docs.google.com/document/d/1ZDwCLevDR6vu_bNWjdfiP1-f2zQrm8AhB6H0TDLFgeM/edit?usp=sharing
