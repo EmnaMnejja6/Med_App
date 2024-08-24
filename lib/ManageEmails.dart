@@ -11,7 +11,7 @@ class ManageEmails {
   String gmailEmail = 'ai.4.pediatric.difficult@enis.tn';
   String gmailPassword = 'NZ2Tq7nTy*&N6uP&';
 
-  final gmailSmtp = gmail("ai.4.pediatric.difficult@enis.tn", "NZ2Tq7nTy*&N6uP&");
+  final gmailSmtp = gmail("ai.4.pediatric.difficult@enis.tn", "put_aacount_password_here");
 
   Future<void> sendEmailAndroid(String recipient, String subject, String htmlContent) async {
     final message = Message()
